@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FARMAцевт - Регистрация</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #5a5a5a;
+        }
+        
+        .header {
+            background-color: #a8d8ea;
+            color: #5a5a5a;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #5a5a5a;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .auth-menu {
+            background-color: #fef6e4;
+            max-width: 500px;
+            margin: 30px auto;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.05);
+            border: 1px solid #e2e2e2;
+        }
+        
+        .auth-menu h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #86c1c1;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #86a8c1;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1e3e3;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: #f8f9fa;
+        }
+        
+        .form-group input:focus {
+            border-color: #86c1c1;
+            outline: none;
+            background-color: #fff;
+        }
+        
+        .btn {
+            background-color: #86c1c1;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #76b1b1;
+        }
+
+        .name-fields {
+            display: flex;
+            gap: 15px;
+        }
+
+        .name-fields .form-group {
+            flex: 1;
+        }
+
+        .terms {
+            margin: 15px 0;
+            font-size: 14px;
+            color: #86a8c1;
+        }
+
+        .terms input {
+            margin-right: 8px;
+        }
+
+        .terms a {
+            color: #86a8c1;
+            text-decoration: none;
+        }
+
+        .terms a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">FARMAцевт</div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="auth-menu">
+            <h2>Регистрация</h2>
+            <form id="registerForm">
+                <div class="name-fields">
+                    <div class="form-group">
+                        <label for="first-name">Имя</label>
+                        <input type="text" id="first-name" name="first-name" required placeholder="Введите ваше имя">
+                    </div>
+                    <div class="form-group">
+                        <label for="last-name">Фамилия</label>
+                        <input type="text" id="last-name" name="last-name" required placeholder="Введите вашу фамилию">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Электронная почта</label>
+                    <input type="email" id="email" name="email" required placeholder="Введите ваш email">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Пароль</label>
+                    <input type="password" id="password" name="password" required placeholder="Придумайте пароль">
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm-password">Подтвердите пароль</label>
+                    <input type="password" id="confirm-password" name="confirm-password" required placeholder="Повторите пароль">
+                </div>
+
+                <div class="terms">
+                    <input type="checkbox" id="agree-terms" name="agree-terms" required>
+                    <label for="agree-terms">Я согласен с <a href="#">условиями использования</a> и <a href="#">политикой конфиденциальности</a></label>
+                </div>
+                
+                <button type="submit" class="btn">Зарегистрироваться</button>
+            </form>
+        </div>
+    </div>
+
+   
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+<script>
+  // Ваша конфигурация Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyBAUD4uAKQkAjbYvOp3fxZHbrfz546L4ak",
+    authDomain: "farma-4c55a.firebaseapp.com",
+    projectId: "farma-4c55a",
+    storageBucket: "farma-4c55a.firebasestorage.app",
+    messagingSenderId: "495155999987",
+    appId: "1:495155999987:web:710ff23e53fd39f963b386",
+    measurementId: "G-7BQRC4B0N3"
+  };
+  
+  // Инициализация Firebase
+  firebase.initializeApp(firebaseConfig);
+</script> 
+<script>
+      registerForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const firstName = document.getElementById('first-name').value;
+    const lastName = document.getElementById('last-name').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
+    const agreeTerms = document.getElementById('agree-terms').checked;
+    
+    // Валидация
+    if (!firstName || !lastName || !email || !password || !confirmPassword || !agreeTerms) {
+        alert('Заполните все поля и примите условия!');
+        return;
+    }
+    
+    if (password !== confirmPassword) {
+        alert('Пароли не совпадают!');
+        return;
+    }
+    
+    try {
+        // 1. Регистрируем пользователя
+        const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+        
+        // 2. Сохраняем дополнительные данные в Firestore
+        await firebase.firestore().collection('users').doc(userCredential.user.uid).set({
+            firstName,
+            lastName,
+            email,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        
+        // 3. Перенаправляем после успеха
+        alert('Регистрация успешна!');
+        window.location.href = 'page3.html';
+        
+    } catch (error) {
+        console.error('Ошибка:', error);
+        alert(`Ошибка регистрации: ${error.message}`);
+    }
+});
+    </script>
+</body>
+</html>

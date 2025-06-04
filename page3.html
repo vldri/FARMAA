@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FARMAцевт - Анкета</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #5a5a5a;
+        }
+        
+        .header {
+            background-color: #a8d8ea;
+            color: #5a5a5a;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #5a5a5a;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .questionnaire {
+            background-color: #fef6e4;
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.05);
+            border: 1px solid #e2e2e2;
+        }
+        
+        .questionnaire h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #86c1c1;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #86a8c1;
+        }
+        
+        .form-group input, 
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1e3e3;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: #f8f9fa;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #86c1c1;
+            outline: none;
+            background-color: #fff;
+        }
+        
+        .sport-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .sport-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            border: 1px solid #d1e3e3;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background-color: #f8f9fa;
+            text-align: center;
+            min-height: 80px;
+        }
+        
+        .sport-option:hover {
+            border-color: #86c1c1;
+            background-color: #f0f7f7;
+        }
+        
+        .sport-option input {
+            margin-bottom: 10px;
+        }
+        
+        .btn {
+            background-color: #86c1c1;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            width: 100%;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            background-color: #76b1b1;
+        }
+        
+        .btn-secondary {
+            background-color: #86a8c1;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #7698b1;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .button-group .btn {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">FARMAцевт</div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="questionnaire">
+            <h2>Заполните анкету</h2>
+            <form id="questionnaireForm">
+                <div class="form-group">
+                    <label for="age">Ваш возраст</label>
+                    <input type="number" id="age" name="age" min="18" max="100" required placeholder="Укажите ваш возраст">
+                </div>
+                
+                <div class="form-group">
+                    <label for="weight">Ваш вес (кг)</label>
+                    <input type="number" id="weight" name="weight" min="40" max="200" required placeholder="Укажите ваш вес">
+                </div>
+                
+                <div class="form-group">
+                    <label>Выберите тип тренировок</label>
+                    <div class="sport-options">
+                        <label class="sport-option">
+                            <input type="radio" name="sport-type" value="bodybuilding" required>
+                            <span>Бодибилдинг</span>
+                        </label>
+                        <label class="sport-option">
+                            <input type="radio" name="sport-type" value="powerlifting">
+                            <span>Пауэрлифтинг</span>
+                        </label>
+                        <label class="sport-option">
+                            <input type="radio" name="sport-type" value="armwrestling">
+                            <span>Армрестлинг</span>
+                        </label>
+                        <label class="sport-option">
+                            <input type="radio" name="sport-type" value="strongman">
+                            <span>Стронгмэн</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button type="submit" class="btn btn-secondary">Получить курс</button>
+                    <button type="button" id="getWorkoutBtn" class="btn">Получить тренировку</button>
+                </div>
+            </form>
+        </div>
+    </div>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+<script>
+  // Конфигурация Firebase (одинаковая для обеих страниц)
+  const firebaseConfig = {
+    apiKey: "AIzaSyBAUD4uAKQkAjbYvOp3fxZHbrfz546L4ak",
+    authDomain: "farma-4c55a.firebaseapp.com",
+    projectId: "farma-4c55a",
+    storageBucket: "farma-4c55a.firebasestorage.app",
+    messagingSenderId: "495155999987",
+    appId: "1:495155999987:web:710ff23e53fd39f963b386",
+    measurementId: "G-7BQRC4B0N3"
+  };
+  
+  // Инициализация Firebase
+  firebase.initializeApp(firebaseConfig);
+</script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const questionnaireForm = document.getElementById('questionnaireForm');
+            const getWorkoutBtn = document.getElementById('getWorkoutBtn');
+            
+            questionnaireForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const age = document.getElementById('age').value;
+                const weight = document.getElementById('weight').value;
+                const sportType = document.querySelector('input[name="sport-type"]:checked');
+                
+                if (age && weight && sportType) {
+                    // Создаем данные для CSV файла с фармакологическим курсом
+                    const csvContent = generatePharmaCourse(age, weight, sportType.value);
+                    const fileName = `farmacevt_${sportType.value}_pharma_course.csv`;
+                    
+                    // Создаем и скачиваем файл
+                    downloadCSV(csvContent, fileName);
+                    
+                    alert('Фармакологический курс успешно сгенерирован и началась загрузка!');
+                } else {
+                    alert('Пожалуйста, заполните все поля перед получением курса');
+                }
+            });
+            
+            getWorkoutBtn.addEventListener('click', function() {
+                const age = document.getElementById('age').value;
+                const weight = document.getElementById('weight').value;
+                const sportType = document.querySelector('input[name="sport-type"]:checked');
+                
+                if (age && weight && sportType) {
+                    // Создаем данные для CSV файла с тренировкой
+                    const csvContent = generateWorkoutCSV(age, weight, sportType.value);
+                    const fileName = `farmacevt_${sportType.value}_workout.csv`;
+                    
+                    // Создаем и скачиваем файл
+                    downloadCSV(csvContent, fileName);
+                    
+                    alert('Тренировка успешно сгенерирована и началась загрузка!');
+                } else {
+                    alert('Пожалуйста, заполните все поля перед получением тренировки');
+                }
+            });
+            
+            // Функция для генерации фармакологического курса
+            function generatePharmaCourse(age, weight, sportType) {
+                const sportTypes = {
+                    'bodybuilding': 'Бодибилдинг',
+                    'powerlifting': 'Пауэрлифтинг',
+                    'armwrestling': 'Армрестлинг',
+                    'strongman': 'Стронгмэн'
+                };
+                
+                const sportName = sportTypes[sportType] || sportType;
+                const date = new Date().toLocaleDateString();
+                const weightCategory = getWeightCategory(weight);
+                
+                let pharmaCourse = '';
+                
+                // Генерируем разные курсы в зависимости от вида спорта и веса
+                switch(sportType) {
+                    case 'bodybuilding':
+                        if (weightCategory === '40-75 кг') {
+                            pharmaCourse = `"1-8 неделя","Тестостерон Энантат","250 мг каждые 5 дней"\n` +
+                                            `"1-8 неделя","Метандростенолон","20 мг ежедневно"\n` +
+                                            `"5-8 неделя","Тамоксифен","10 мг ежедневно"\n` +
+                                            `"После курса","Кломифен","50 мг ежедневно 2 недели"`;
+                        } else if (weightCategory === '75-90 кг') {
+                            pharmaCourse = `"1-10 неделя","Тестостерон Энантат","500 мг каждые 5 дней"\n` +
+                                            `"1-6 неделя","Болденон","400 мг в неделю"\n` +
+                                            `"1-6 неделя","Туринабол","40 мг ежедневно"\n` +
+                                            `"5-10 неделя","Тамоксифен","10 мг ежедневно"\n` +
+                                            `"После курса","Кломифен","50 мг ежедневно 3 недели"`;
+                        } else { // 90+ кг
+                            pharmaCourse = `"1-12 неделя","Тестостерон Энантат","500 мг каждые 5 дней"\n` +
+                                            `"1-12 неделя","Нандролон Деканоат","400 мг в неделю"\n` +
+                                            `"1-8 неделя","Анастрозол","0.5 мг через день"\n` +
+                                            `"5-12 неделя","Оксиметолон","50 мг ежедневно"\n` +
+                                            `"После курса","Кломифен + ХГЧ","50 мг/500 ЕД ежедневно 3 недели"`;
+                        }
+                        break;
+                        
+                    case 'powerlifting':
+                        if (weightCategory === '40-75 кг') {
+                            pharmaCourse = `"1-6 неделя","Тестостерон Пропионат","100 мг через день"\n` +
+                                            `"1-6 неделя","Туринабол","30 мг ежедневно"\n` +
+                                            `"После курса","Тамоксифен","20 мг ежедневно 2 недели"`;
+                        } else if (weightCategory === '75-90 кг') {
+                            pharmaCourse = `"1-8 неделя","Тестостерон Энантат","250 мг каждые 5 дней"\n` +
+                                            `"1-8 неделя","Болденон","300 мг в неделю"\n` +
+                                            `"1-6 неделя","Станазолол","50 мг ежедневно"\n` +
+                                            `"После курса","Кломифен","50 мг ежедневно 3 недели"`;
+                        } else { // 90+ кг
+                            pharmaCourse = `"1-10 неделя","Тестостерон Энантат","500 мг каждые 5 дней"\n` +
+                                            `"1-10 неделя","Нандролон Деканоат","400 мг в неделю"\n` +
+                                            `"1-8 неделя","Оксиметолон","50 мг ежедневно"\n` +
+                                            `"5-10 неделя","Анастрозол","0.5 мг через день"\n` +
+                                            `"После курса","Кломифен + ХГЧ","50 мг/500 ЕД ежедневно 4 недели"`;
+                        }
+                        break;
+                        
+                    case 'armwrestling':
+                        if (weightCategory === '40-75 кг') {
+                            pharmaCourse = `"1-6 неделя","Станазолол","30 мг ежедневно"\n` +
+                                            `"1-6 неделя","Оксиметолон","25 мг ежедневно"\n` +
+                                            `"После курса","Тамоксифен","20 мг ежедневно 2 недели"`;
+                        } else if (weightCategory === '75-90 кг') {
+                            pharmaCourse = `"1-8 неделя","Станазолол","50 мг ежедневно"\n` +
+                                            `"1-8 неделя","Болденон","300 мг в неделю"\n` +
+                                            `"После курса","Кломифен","50 мг ежедневно 3 недели"`;
+                        } else { // 90+ кг
+                            pharmaCourse = `"1-8 неделя","Тестостерон Пропионат","100 мг через день"\n` +
+                                            `"1-8 неделя","Оксиметолон","50 мг ежедневно"\n` +
+                                            `"1-8 неделя","Туринабол","40 мг ежедневно"\n` +
+                                            `"После курса","Кломифен + ХГЧ","50 мг/500 ЕД ежедневно 3 недели"`;
+                        }
+                        break;
+                        
+                    case 'strongman':
+                        if (weightCategory === '40-75 кг') {
+                            pharmaCourse = `"1-8 неделя","Тестостерон Энантат","250 мг каждые 5 дней"\n` +
+                                            `"1-8 неделя","Болденон","300 мг в неделю"\n` +
+                                            `"После курса","Кломифен","50 мг ежедневно 3 недели"`;
+                        } else if (weightCategory === '75-90 кг') {
+                            pharmaCourse = `"1-10 неделя","Тестостерон Энантат","500 мг каждые 5 дней"\n` +
+                                            `"1-10 неделя","Нандролон Деканоат","400 мг в неделю"\n` +
+                                            `"1-8 неделя","Анастрозол","0.5 мг через день"\n` +
+                                            `"После курса","Кломифен + ХГЧ","50 мг/500 ЕД ежедневно 4 недели"`;
+                        } else { // 90+ кг
+                            pharmaCourse = `"1-12 неделя","Тестостерон Энантат","500 мг каждые 5 дней"\n` +
+                                            `"1-12 неделя","Нандролон Деканоат","600 мг в неделю"\n` +
+                                            `"1-12 неделя","Оксиметолон","50 мг ежедневно"\n` +
+                                            `"1-12 неделя","Анастрозол","1 мг через день"\n` +
+                                            `"После курса","Кломифен + ХГЧ","50 мг/1000 ЕД ежедневно 4 недели"`;
+                        }
+                        break;
+                }
+                
+                return `"FARMAцевт - Фармакологический курс (${sportName}, ${weightCategory})"\n\n` +
+                       `"Дата создания","${date}"\n` +
+                       `"Возраст","${age}"\n` +
+                       `"Вес","${weight} кг"\n` +
+                       `"Тип тренировок","${sportName}"\n` +
+                       `"Весовая категория","${weightCategory}"\n\n` +
+                       `"Период","Препарат","Дозировка и частота приема"\n` +
+                       pharmaCourse;
+            }
+            
+            // Функция для определения весовой категории
+            function getWeightCategory(weight) {
+                weight = parseInt(weight);
+                if (weight <= 75) return '40-75 кг';
+                if (weight <= 90) return '75-90 кг';
+                return '90+ кг';
+            }
+            
+            // Функция для генерации CSV контента с разными тренировками
+            function generateWorkoutCSV(age, weight, sportType) {
+                const sportTypes = {
+                    'bodybuilding': 'Бодибилдинг',
+                    'powerlifting': 'Пауэрлифтинг',
+                    'armwrestling': 'Армрестлинг',
+                    'strongman': 'Стронгмэн'
+                };
+                
+                const sportName = sportTypes[sportType] || sportType;
+                const date = new Date().toLocaleDateString();
+                
+                let workoutPlan = '';
+                
+                // Генерируем разные планы тренировок в зависимости от вида спорта
+                switch(sportType) {
+                    case 'bodybuilding':
+                        workoutPlan = `"1","Грудь/Спина","Жим лежа 4x8-12, Тяга штанги в наклоне 4x8-12, Разводка гантелей 3x12-15",,"Отдых 60-90 сек"\n` +
+                                      `"2","Ноги","Приседания со штангой 4x8-12, Жим ногами 3x10-12, Икры сидя 4x15-20",,"Отдых 60-90 сек"\n` +
+                                      `"3","Плечи/Руки","Жим штанги стоя 4x8-12, Подъем штанги на бицепс 3x10-12, Французский жим 3x10-12",,"Отдых 60 сек"\n` +
+                                      `"Примечание","Акцент на гипертрофию мышц. Работа в диапазоне 8-12 повторений с умеренным весом."`;
+                        break;
+                        
+                    case 'powerlifting':
+                        workoutPlan = `"1","Приседания","Приседания со штангой 5x5 (80-85% от 1ПМ), Жим ногами 3x8, Гиперэкстензия 3x10",,"Отдых 3-5 мин"\n` +
+                                      `"2","Жим лежа","Жим лежа 5x5 (80-85% от 1ПМ), Жим гантелей на наклонной 3x8, Отжимания на брусьях 3x8",,"Отдых 3-5 мин"\n` +
+                                      `"3","Становая тяга","Становая тяга 5x5 (80-85% от 1ПМ), Тяга штанги к поясу 3x8, Шраги 3x10",,"Отдых 3-5 мин"\n` +
+                                      `"Примечание","Акцент на развитие максимальной силы. Большие веса, мало повторений, длительный отдых."`;
+                        break;
+                        
+                    case 'armwrestling':
+                        workoutPlan = `"1","Тяга","Статическая тяга с резиной 4x6-8 (удержание 5 сек), Сгибания запястий со штангой 4x10-12",,"Отдых 2 мин"\n` +
+                                      `"2","Пронация/супинация","Пронация с гантелью 3x8-10, Супинация с гантелью 3x8-10, Молотковые сгибания 3x8-10",,"Отдых 2 мин"\n` +
+                                      `"3","Комплекс","Эксцентрические подтягивания 3x4-6, Удержание блина пальцами 3xмакс время",,"Отдых 3 мин"\n` +
+                                      `"Примечание","Специфические упражнения для развития силы хвата и мышц предплечья."`;
+                        break;
+                        
+                    case 'strongman':
+                        workoutPlan = `"1","Силовая","Прогулка фермера 4x20м, Приседания с бочкой 4x6-8, Тяга автомобиля 3x15м",,"Отдых 3-5 мин"\n` +
+                                      `"2","Жимовая","Жим бревна 5x5, Толчок бочки 3x8, Жим штанги стоя 3x6-8",,"Отдых 3-5 мин"\n` +
+                                      `"3","Функционал","Перенос мешков 3x20м, Камень Атласа 3x5, Бросок покрышки 3x10",,"Отдых 3-5 мин"\n` +
+                                      `"Примечание","Тренировка функциональной силы с нестандартными снарядами и движениями."`;
+                        break;
+                }
+                
+                return `"FARMAцевт - Персональная тренировка (${sportName})"\n\n` +
+                       `"Дата создания","${date}"\n` +
+                       `"Возраст","${age}"\n` +
+                       `"Вес","${weight} кг"\n` +
+                       `"Тип тренировок","${sportName}"\n\n` +
+                       `"День","Группа мышц","Упражнения","ПодходыxПовторения","Отдых"\n` +
+                       workoutPlan;
+            }
+            
+            // Функция для скачивания CSV файла
+            function downloadCSV(csvContent, fileName) {
+                const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                const url = URL.createObjectURL(blob);
+                
+                link.setAttribute('href', url);
+                link.setAttribute('download', fileName);
+                link.style.visibility = 'hidden';
+                
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        });
+    </script>
+    <script>
+  firebase.auth().onAuthStateChanged((user) => {
+    if (!user) {
+      window.location.href = 'index.html'; // Если не авторизован
+    } else {
+      // Загружаем данные пользователя
+      firebase.firestore().collection('users').doc(user.uid).get()
+        .then(doc => {
+          if (doc.exists) {
+            console.log("Данные пользователя:", doc.data());
+          }
+        });
+    }
+  });
+</script>
+<button id="logoutBtn" class="btn">Выйти</button>
+
+<script>
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    firebase.auth().signOut()
+      .then(() => window.location.href = 'index.html');
+  });
+</script>
+</body>
+</html>
